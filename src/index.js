@@ -32,8 +32,8 @@ Mongoose.connect(dbAddress, { useNewUrlParser: true }, (err) => {
         await next();
       } catch (error) {
         // 只返回 JSON 格式的响应
-        ctx.status = error.status || 500;
-        ctx.body = { message: error.message };
+        ctx.status = 200;
+        ctx.body = { code: error.status || 500, message: error.message };
       }
     });
 

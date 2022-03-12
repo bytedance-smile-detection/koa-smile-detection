@@ -2,10 +2,6 @@ import User from "../models/users.js";
 import jwt from "jsonwebtoken";
 import * as argon2 from "argon2";
 import { JWT_SECRET } from "../config.js";
-import {
-  UnauthorizedException,
-  ConflictException,
-} from "../middlewares/exceptions.js";
 
 class AuthController {
   static async login(ctx) {
@@ -17,16 +13,16 @@ class AuthController {
     const { name, password } = ctx.request.body;
     const user = await User.findOne({ name });
 
+    ctx.status = 200;
     if (!user) {
-      throw new UnauthorizedException("User not found");
+      ctx.body = { code: 401, message: "User does not exist" };
     } else if (await argon2.verify(user.password, password)) {
-      const userInfo = { name: user.name, password: user.password };
+      const userInfo = { name: user.name };
       const token = jwt.sign(userInfo, JWT_SECRET);
 
-      ctx.status = 200;
-      ctx.body = { message: "Login successfully", data: token };
+      ctx.body = { code: 200, message: "Login successfully", data: token };
     } else {
-      throw new UnauthorizedException("Invalid password");
+      ctx.body = { code: 401, message: "Wrong password" };
     }
   }
 
@@ -39,8 +35,9 @@ class AuthController {
     let { name, password } = ctx.request.body;
     const findResult = await User.findOne({ name });
 
+    ctx.status = 200;
     if (findResult) {
-      throw new ConflictException("User already exists");
+      ctx.body = { code: 409, message: "User already exists" };
     } else {
       // 使用 Agron2 算法加密密码
       password = await argon2.hash(password);
@@ -48,8 +45,7 @@ class AuthController {
 
       const user = await newUser.save();
 
-      ctx.status = 201;
-      ctx.body = { message: "Register successfully", data: user };
+      ctx.body = { code: 201, message: "Register successfully", data: user };
     }
   }
 }
