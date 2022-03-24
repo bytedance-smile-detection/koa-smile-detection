@@ -43,9 +43,9 @@ class AuthController {
       password = await argon2.hash(password);
       const newUser = new User({ name, password });
 
-      const user = await newUser.save();
+      await newUser.save();
 
-      ctx.body = { code: 201, message: "Register successfully", data: user };
+      ctx.body = { code: 201, message: "Register successfully" };
     }
   }
 }

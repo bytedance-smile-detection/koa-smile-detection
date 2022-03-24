@@ -22,6 +22,9 @@
     "koa-logger": "^3.2.1",
     "koa-parameter": "^3.0.1",
     "koa-static": "^5.0.0",
-    "mongoose": "^6.2.1"
+    "moment": "^2.29.1",
+    "mongoose": "^6.2.1",
+    "nanoid": "^3.3.1",
+    "qiniu": "^7.4.0"
   }
 }

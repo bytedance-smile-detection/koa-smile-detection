@@ -10,6 +10,7 @@ import Mongoose from "mongoose";
 import jwt from "koa-jwt";
 import authRouter from "./routes/auths.js";
 import userRouter from "./routes/users.js";
+import uploadRouter from "./routes/upload.js";
 import { dbAddress, JWT_SECRET } from "./config.js";
 
 const app = new Koa();
@@ -23,8 +24,17 @@ Mongoose.connect(dbAddress, { useNewUrlParser: true }, (err) => {
     app.use(logger());
     app.use(cors());
     app.use(koaStatic(path.join(__dirname, "public"))); // 静态资源目录
-    app.use(koaBody());
     app.use(koaParameter(app));
+    app.use(
+      koaBody({
+        multipart: true,
+        formidable: {
+          // uploadDir: path.join(__dirname, "public/uploads"),
+          // maxFileSize: 200 * 1024 * 1024, // 设置上传文件大小最大限制，默认2M
+          keepExtensions: true, // 保持文件的后缀
+        },
+      })
+    );
 
     // 添加错误处理中间件
     app.use(async (ctx, next) => {
@@ -41,10 +51,11 @@ Mongoose.connect(dbAddress, { useNewUrlParser: true }, (err) => {
     app.use(authRouter.routes()).use(authRouter.allowedMethods());
 
     // 注册 JWT 中间件
-    app.use(jwt({ secret: JWT_SECRET }).unless({ method: "GET" }));
+    app.use(jwt({ secret: JWT_SECRET }));
 
     // 需要 JWT Token 才能访问
     app.use(userRouter.routes()).use(userRouter.allowedMethods());
+    app.use(uploadRouter.routes()).use(uploadRouter.allowedMethods());
 
     app.listen(8000);
   } else {

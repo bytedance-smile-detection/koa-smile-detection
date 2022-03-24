@@ -1,3 +1,10 @@
 {
-  "cSpell.words": ["auths", "bodyparser", "lenet", "middlewares"]
+  "cSpell.words": [
+    "auths",
+    "bodyparser",
+    "fsize",
+    "lenet",
+    "middlewares",
+    "qiniu"
+  ]
 }
