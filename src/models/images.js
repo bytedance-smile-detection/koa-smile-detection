@@ -19,10 +19,6 @@ const ImageSchema = new Schema({
     type: Number,
     required: true,
   },
-  hash: {
-    type: String,
-    required: true,
-  },
 });
 
 export default model("Image", ImageSchema);
