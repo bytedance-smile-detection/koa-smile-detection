@@ -1,4 +1,4 @@
-export const dbAddress = "mongodb://smile:123456@112.124.39.72:27017/smile_detection";
+export const dbAddress = "mongodb://smile:123456@43.138.159.147:27017/smile_detection";
 export const JWT_SECRET = "byte_squad";
 
 export const ACCESS_KEY = "WmhrCcSYyrhnllUIRzToXnj9VC09hG_hMeh7OyLC";
